@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Timetable Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="logo-container">
+  <img src="{{ url_for('static', filename='school_logo.png') }}" alt="School Logo" class="school-logo">
+</div>
+
+    <h1>📘 Weekly Timetable for Grades 7, 8, and 9</h1>
+
+    {% for grade, schedule in timetable.items() %}
+        <h2>Grade {{ grade }}</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Day</th>
+                    {% for i in range(lesson_times|length) %}
+                        <th>Lesson {{ i + 1 }}</th>
+                        {% if i in [1, 3, 5] %}
+                            <th class="break">
+                                {% if i == 1 %}Health Break{% elif i == 3 %}Sunshine Break{% elif i == 5 %}Lunch Break{% endif %}
+                            </th>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for day, lessons in schedule.items() %}
+                    <tr>
+                        <td>{{ day }}</td>
+                        {% for i in range(lesson_times|length) %}
+                            <td>{{ lessons[i] if lessons[i] else "Free" }}</td>
+                            {% if i in [1, 3, 5] %}
+                                <td class="break">—</td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endfor %}
+
+
+  
+
+
+    <a href="/download">📥 Download PDF</a>
+
+</body>
+</html>
+
